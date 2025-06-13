@@ -18,20 +18,20 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
                 max_threads=n;
             }
             let mut handles=Vec::new();
+            let file_names=Arc::new(files);
+            let query=Arc::new(pattern);
             for t in 0..max_threads{
-                let word=pattern.clone();
                 let s=t*div;
-                let e;
-                if t==max_threads-1 {
-                    e=n;
+                let e= if t==max_threads-1 {
+                    n
                 }
                 else{
-                    e=(t+1)*div;
-                }
-                let file_names=Arc::new(files.clone());
+                    (t+1)*div
+                };
+                let temp=Arc::clone(&file_names);
+                let word=Arc::clone(&query);
                 let handle=thread::spawn(move ||->Result<Vec<String>, std::io::Error>{
                     let mut op=vec![];
-                    let temp=Arc::clone(&file_names);
                     for i in temp[s..e].iter(){
                         let content=fs::read_to_string(&i)?;
                         op.push(format!("Word {} occurs in Document {} in following lines ",word.red(),&i.yellow()));
