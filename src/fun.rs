@@ -28,7 +28,9 @@ pub enum Cmnds{
 
 #[derive(Debug,Parser)]
 #[command(propagate_version=true)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version="1.0")]
+#[command(name = "Command Line Functionalities", long_about=None)]
+///Can perfrom linux cli commands like ls, echo, cat, find & grep
 pub struct Cli{
     #[command(subcommand)]
     pub cmnd: Cmnds
