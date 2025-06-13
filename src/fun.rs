@@ -63,7 +63,7 @@ mod tests{
     use super::*;
 
     #[test]
-    fn test_case_sensitive(){
+    fn test_search(){
         let q="you";
         let f="\
         Hi Hello how are you ?
