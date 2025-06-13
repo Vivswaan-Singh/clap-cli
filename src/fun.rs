@@ -2,11 +2,9 @@ use std::fs;
 use std::path::Path;
 use std::error::Error;
 use colored::*;
-use clap::{Parser,command,Subcommand}; 
+use clap::{command, Parser, Subcommand}; 
 use anyhow::{Context,Result};
 pub mod cmds;
-
-
 
 
 
@@ -32,7 +30,7 @@ pub enum Cmnds{
 
 #[derive(Debug,Parser)]
 #[command(propagate_version=true)]
-#[command(version)]
+#[command(author, version, about, long_about = None)]
 pub struct Cli{
     #[command(subcommand)]
     pub cmnd: Cmnds
@@ -52,19 +50,7 @@ pub fn run(cli: Cli)->Result<(),Box<dyn Error>>{
 	        }       
         },
         Cmnds::Grep { pattern, files } => {
-            
-            let word=&pattern[..];
-            for i in files{
-                let content=fs::read_to_string(&i)?;
-                let ans = cmds::grep::search(word,&content);
-                let mut cnt=1;
-                println!("Word {} occurs in Document {} in following lines ",word.red(),&i.yellow());
-                for line in ans{
-                    println!("Line {cnt}. {:?}",line);
-                    cnt+=1;
-                }
-                println!("");
-            }
+            return cmds::grep::grep_parallel(pattern, files);
         },
         Cmnds::Cat { files } => {
             for i in files{
