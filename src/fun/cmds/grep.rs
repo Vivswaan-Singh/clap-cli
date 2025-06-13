@@ -27,20 +27,20 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
                 let temp=Arc::clone(&file_names);
                 let word=Arc::clone(&query);
                 let handle=thread::spawn(move ||->Result<Vec<String>, std::io::Error>{
-                    let mut op=vec![];
+                    let mut ans=vec![];
                     for i in temp[s..e].iter(){
                         let content=fs::read_to_string(&i)?;
-                        op.push(format!("Word {} occurs in Document {} in following lines ",word.red(),&i.yellow()));
-                        op.append(&mut search(&word,&content));
-                        op.push(String::from(""));
+                        ans.push(format!("Word {} occurs in Document {} in following lines ",word.red(),&i.yellow()));
+                        ans.append(&mut search(&word,&content));
+                        ans.push(String::from(""));
                     }
-                    Ok(op)
+                    Ok(ans)
                 });
                 handles.push(handle);
             }
             for h in handles{
-                let op=h.join().unwrap()?;
-                for lines in op{
+                let ans=h.join().unwrap()?;
+                for lines in ans{
                     println!("{}",lines);
                 }
             }

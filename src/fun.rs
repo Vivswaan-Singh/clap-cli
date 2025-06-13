@@ -1,9 +1,7 @@
-use std::fs;
 use std::path::Path;
 use std::error::Error;
-use colored::*;
 use clap::{command, Parser, Subcommand}; 
-use anyhow::{Context,Result};
+use anyhow::{Result};
 pub mod cmds;
 
 
@@ -40,36 +38,22 @@ pub struct Cli{
 pub fn run(cli: Cli)->Result<(),Box<dyn Error>>{
     match cli.cmnd {
         Cmnds::Echo { text } => {
-            if let Err(ref e) = cmds::echo::show(&text){
-		        return Err(e.to_string().into()); 
-	        } 
+            return cmds::echo::show(&text);
         },
         Cmnds::Ls => {
-            if let Err(ref e) = cmds::ls::see_folder(Path::new(".")) {
-                return Err(e.to_string().into()); 
-	        }       
+            return cmds::ls::see_folder(Path::new("."));
         },
         Cmnds::Grep { pattern, files } => {
             return cmds::grep::grep_parallel(pattern, files);
         },
         Cmnds::Cat { files } => {
-            for i in files{
-                let content=fs::read_to_string(i.clone()).with_context(|| format!("could not read file `{}`", i))?;
-                println!("Document {} :",i.purple());
-                if let Err(ref e) = cmds::cat::show_file(&content){
-		            return Err(e.to_string().into());
-	            }
-                println!("");
-            }
+            return cmds::cat::cat(files);
         },
         Cmnds::Find { pattern }=> {
-            if let Err(ref e) = cmds::find::find_out(Path::new("."), &pattern) {
-		        return Err(e.to_string().into()); 
-	        } 
+            return cmds::find::find_out(Path::new("."), &pattern);
         },
-        
     }
-    Ok(())
+    
 }
 
 #[cfg(test)]
