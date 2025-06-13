@@ -63,10 +63,11 @@ mod tests{
     use super::*;
 
     #[test]
-    fn check_echo(){
-        let v=vec![String::from("1")];
-        if let Err(ref e) = cmds::echo::show(&v){
-		        println!("{}", e);
-	        }
+    fn test_case_sensitive(){
+        let q="you";
+        let f="\
+        Hi Hello how are you ?
+        I am fine. Thnak You for asking. ";
+        assert_eq!(vec!["Line 1: Hi Hello how are you ?"],cmds::grep::search(q, f));
     }
 }

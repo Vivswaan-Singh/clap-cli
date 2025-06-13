@@ -47,7 +47,7 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
             Ok(())
 }
 
-fn search<'a>(query: &'a str, file: &'a str)->Vec<String>{
+pub fn search<'a>(query: &'a str, file: &'a str)->Vec<String>{
     let mut ans=Vec::new();
     let mut cnt = 1;
     for line in file.lines(){
