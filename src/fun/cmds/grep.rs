@@ -7,16 +7,12 @@ use colored::*;
 pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Error>>{
             let n=files.len();
             let cpus=num_cpus::get()/2;
-            let div;
-            let max_threads;
-            if n>cpus{
-                div=n/(cpus);
-                max_threads=cpus;
+            let (div,max_threads ) =  if n>cpus {
+                ((n/cpus),cpus)
             }
             else{
-                div=1;
-                max_threads=n;
-            }
+                (1,n)
+            };
             let mut handles=Vec::new();
             let file_names=Arc::new(files);
             let query=Arc::new(pattern);
