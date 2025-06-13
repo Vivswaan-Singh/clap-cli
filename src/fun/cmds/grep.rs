@@ -1,7 +1,7 @@
 
 use std::error::Error;
 use std::fs;
-use std::thread;
+use std::{thread,sync::Arc};
 use colored::*;
 
 pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Error>>{
@@ -23,16 +23,17 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
                 let word=pattern.clone();
                 let s=t*div;
                 let e;
-                if t==3 {
+                if t==max_threads-1 {
                     e=n;
                 }
                 else{
                     e=(t+1)*div;
                 }
-                let temp=files[s..e].to_vec().clone();
+                let file_names=Arc::new(files.clone());
                 let handle=thread::spawn(move ||->Result<Vec<Vec<String>>, std::io::Error>{
                     let mut op=vec![];
-                    for i in temp{
+                    let temp=Arc::clone(&file_names);
+                    for i in temp[s..e].iter(){
                         let content=fs::read_to_string(&i)?;
                         let mut ans=vec![(format!("Word {} occurs in Document {} in following lines ",word.red(),&i.yellow()))];
                         ans.append(&mut search(&word,&content));
