@@ -1,0 +1,12 @@
+/Users/vivswsyvora/Documents/rust-projs/rust_cli/target/debug/deps/librust_cli-8418d47baf9c738f.rmeta: src/main.rs src/fun.rs src/fun/cmds.rs src/fun/cmds/echo.rs src/fun/cmds/ls.rs src/fun/cmds/grep.rs src/fun/cmds/cat.rs src/fun/cmds/find.rs
+
+/Users/vivswsyvora/Documents/rust-projs/rust_cli/target/debug/deps/rust_cli-8418d47baf9c738f.d: src/main.rs src/fun.rs src/fun/cmds.rs src/fun/cmds/echo.rs src/fun/cmds/ls.rs src/fun/cmds/grep.rs src/fun/cmds/cat.rs src/fun/cmds/find.rs
+
+src/main.rs:
+src/fun.rs:
+src/fun/cmds.rs:
+src/fun/cmds/echo.rs:
+src/fun/cmds/ls.rs:
+src/fun/cmds/grep.rs:
+src/fun/cmds/cat.rs:
+src/fun/cmds/find.rs:

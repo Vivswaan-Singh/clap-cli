@@ -6,12 +6,12 @@ use colored::*;
 
 pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Error>>{
             let n=files.len();
+            let cpus=num_cpus::get()/2;
             let div;
             let max_threads;
-            if n>4 {
-                div=n/4;
-                max_threads=4;
-
+            if n>cpus{
+                div=n/(cpus);
+                max_threads=cpus;
             }
             else{
                 div=1;
@@ -19,7 +19,6 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
             }
             let mut handles=Vec::new();
             for t in 0..max_threads{
-                println!("");
                 let word=pattern.clone();
                 let s=t*div;
                 let e;
@@ -43,7 +42,6 @@ pub fn grep_parallel( pattern: String, files: Vec<String>)->Result<(),Box<dyn Er
                 });
                 handles.push(handle);
             }
-            
             for h in handles{
                 let op=h.join().unwrap()?;
                 for lines in op{
